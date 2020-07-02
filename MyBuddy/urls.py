@@ -21,6 +21,7 @@ urlpatterns = [
     path('accounts/', include('account.urls')),
     path('dive/', include('dive.urls')),
     path('location/', include('location.urls')),
+    path('front/', include('front_test.urls')),
 ]
 
 import scheduler

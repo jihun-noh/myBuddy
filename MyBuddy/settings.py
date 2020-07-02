@@ -22,6 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Environ Variables
 KHOA_SERVICE_KEY = os.environ.get('DJANGO_KHOA_SERVICE_KEY', None)
 KAKAO_REST_APP_KEY = os.environ.get('DJANGO_KAKAO_REST_APP_KEY', None)
+KAKAO_JAVASCRIPT_APP_KEY = os.environ.get('DJANGO_KAKAO_JAVASCRIPT_APP_KEY', None)
 secret_key = os.environ.get('DJANGO_SECRET_KEY', None)
 if not secret_key:
     raise ValueError('You must have "SECRET_KEY" variable')
@@ -49,9 +50,9 @@ INSTALLED_APPS = [
     'requests',
     'account',
     'dive',
-    'map',
     'location',
     'third_party_api',
+    'front_test',
 ]
 
 MIDDLEWARE = [

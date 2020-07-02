@@ -17,5 +17,5 @@ from django.urls import path, re_path, include
 from . import views
 
 urlpatterns = [
-    path('showmap/', views.show_map),
+    path('map/', views.show_map),
 ]
