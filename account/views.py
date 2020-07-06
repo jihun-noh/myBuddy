@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
@@ -21,8 +21,8 @@ def login_view(request):
     if request.method == 'POST':
         user = authenticate(email=request.data['email'], password=request.data['password'])
         if user is not None:
-            login(request, user)
-            return Response('로그인 성공 - ' + user.email)
+            login(request, user)            
+            return redirect('/front/menu/')
         else:
             return Response('실패')
 

@@ -18,4 +18,6 @@ from . import views
 
 urlpatterns = [
     path('map/', views.show_map),
+    path('login/', views.show_login),
+    path('menu/', views.show_menu),
 ]

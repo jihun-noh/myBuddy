@@ -16,15 +16,13 @@ Including another URLconf
 from django.urls import path, re_path, include
 from rest_framework import routers
 from . import views
-from django.views.decorators.csrf import csrf_exempt
-
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('login', csrf_exempt(views.login_view)),
-    path('logout', csrf_exempt(views.logout_view)),
-    path('signup', views.signup),
+    path('login/', views.login_view),
+    path('logout/', views.logout_view),
+    path('signup/', views.signup),
 ]
