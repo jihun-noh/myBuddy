@@ -2,15 +2,17 @@
 <head>
 </head>
 <body>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'front_test/css/style.css' %}">
     <div style="text-align:center;padding-top:20%">
-        <form name="divepoint" action="http://127.0.0.1:8000/dive/divepoints/" method="POST">
+        <form name="signup" action="http://127.0.0.1:8000/accounts/signup/" method="POST">
             {% csrf_token %}
-            Email <input type="text" name="email" readonly/><br><br>
+            Email <input type="text" name="email"/><br><br>
             Password <input type="password" name="password"/><br><br>
-            Nickname <input type="text" name="nickname" readonly/><br><br>
+            Nickname <input type="text" name="nickname"/><br><br>
             Photo <input type="text" name="photo" readonly/><br><br>
             License <input type="text" name="license" readonly/><br><br>
-            License photo <input type="text" name="licens_photo"/><br><br>
+            License photo <input type="text" name="licens_photo" readonly/><br><br>
             <input type="submit" value="submit"/>
         </form>
     </div>

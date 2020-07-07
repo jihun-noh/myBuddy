@@ -23,6 +23,8 @@ class DiveLogViewSet(viewsets.ModelViewSet):
 @api_view(['GET'])
 def dive_point(request):
     if request.method == 'GET':
+        d = DivePoint()
+        d._create_point_id('1')
         queryset = DivePoint.objects.all()
         serializer_class = DivePointSerializer(queryset, many=True)
         return Response(serializer_class.data)

@@ -2,6 +2,14 @@
 <head>
 </head>
 <body>
-    <button type="button" name="logout" onclick="location.href='http://127.0.0.1:8000/accounts/logout/'"></button>
+  <div style="width:50%;float:left;">
+    <button type="button" name="map" style="width:100px;height:60px;"
+    onclick="location.href='http://127.0.0.1:8000/front/map/'">map</button>
+    <button type="button" name="logout" style="width:100px;height:60px;"
+    onclick="location.href='http://127.0.0.1:8000/accounts/logout/'">logout</button>
+  </div>
+  <div style="width:50%;float:right;">
+    로그인 유저 : {{session_email}}
+  </div>
 </body>
 </html>

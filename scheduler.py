@@ -19,7 +19,7 @@ def insert_observation_post_schedule():
         return
     print('The number of Observation Post is [{}]'.format(len(res_dict['result']['data'])))
     for data in res_dict['result']['data']:
-        queryset = ObservationPost.objects.filter(pk=data['obs_post_id'])
+        queryset = ObservationPost.objects.filter(obs_post_id=data['obs_post_id'])
         if queryset.exists():
             continue
         else:

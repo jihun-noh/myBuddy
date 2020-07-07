@@ -47,3 +47,7 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_superuser
+
+    @property
+    def get_email(self):
+        return self.email
