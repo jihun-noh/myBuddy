@@ -139,13 +139,9 @@ STATICFILES_DIRS = [
     '/front_test/static/',
 ]
 
-"""REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAdminUser'
-    ]
-}"""
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+}
 
 # Scheduler 설정
 # - jobs 내용을 Project Database 로 생성

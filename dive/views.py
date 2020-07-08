@@ -4,12 +4,15 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
+from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import DivePointSerializer, DiveLogSerializer
 from .models import DivePoint, DiveLog
 
 class DivePointViewSet(viewsets.ModelViewSet):
     serializer_class = DivePointSerializer
     queryset = DivePoint.objects.all()
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('diver',)
 
 point_list = DivePointViewSet.as_view({
     'get': 'list',
