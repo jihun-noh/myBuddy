@@ -15,9 +15,9 @@ class KhoaApi():
     def __init__(self):
         self.service_key = settings.KHOA_SERVICE_KEY
 
-    def khoa_get_sea_state(self, obs_code, date):
-        params = {'ServiceKey':self.service_key, 'ObsCode':obs_code, 'Date':date, 'ResultType':'json'}
-        res = requests.get('http://www.khoa.go.kr/oceangrid/grid/api/tideObsTemp/search.do', params=params)
+    def khoa_get_sea_state(self, obs_code):
+        params = {'ServiceKey':self.service_key, 'ObsCode':obs_code, 'ResultType':'json'}
+        res = requests.get('http://www.khoa.go.kr/oceangrid/grid/api/tideObsRecent/search.do', params=params)
         return res
 
     def khoa_get_observation_post(self):

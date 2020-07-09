@@ -10,38 +10,36 @@
     <script>
     $(document).ready(function() {
         document.getElementById("submit").onclick = function() {
-            url = "http://127.0.0.1:8000/dive/divepoints/";
-            data = $("#frm_divepoint").serialize();
+            var url = "http://127.0.0.1:8000/dive/divepoints/";
+            var data = $("#frm_divepoint").serialize();
             requestAjax("POST", url, data, function(){
                 alert("등록완료");
                 location.reload(true);
             });
         }
+        document.getElementById("delete").onclick = function() {
+            var fixedLatLng = getFixedLatLng(new kakao.maps.LatLng($("#latitude").val(), $("#longitude").val()));
+            if(pointExists(fixedLatLng)){
+                if(confirm(`[${$("#point_nm").val()}] 포인트를 삭제하겠습니까?\n(등록된 모든 로그가 같이 삭제됩니다.)`)){
+                    var url = `http://127.0.0.1:8000/dive/divepoints/${$("#id").val()}/`;
+                    requestAjax("DELETE", url, null, function(){
+                        alert("삭제완료");
+                        location.reload(true);
+                    });
+                } else{
+                    return;
+                }
+            }
+        }
+
         initMap();
+
     });
 
     var map;
     var markers = [];
-    var points = [];
-
-    function getCurrentLocation() {
-      if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(pos) {
-          var lat = pos.coords.latitude;
-          var lng = pos.coords.longitude;
-          console.log("현재위치 - " + lat + ' ' + lng);
-          moveMap(new kakao.maps.LatLng(lat, lng), 5)
-        }, function(error) {
-          console.error(error);
-          }, {
-            enableHighAccuracy: false,
-            maximumAge: 0,
-            timeout: Infinity
-          });
-      }else {
-        console.log('GPS를 지원하지 않습니다');
-      }
-    }
+    var divePoints = [];
+    var obsPosts = [];
 
     function initMap() {
       var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
@@ -54,7 +52,9 @@
         addMarker('', mouseEvent.latLng);
       });
 
+      initObservationPosts();
       initMarkers()
+
     }
 
     function initMarkers() {
@@ -62,7 +62,7 @@
         var data = {"diver":{{session_id}}};
         requestAjax("GET", url, data, function (response){
             response.forEach(function(point){
-                points.push(point)
+                divePoints.push(point);
                 addMarker(point.point_nm, new kakao.maps.LatLng(point.latitude, point.longitude));
             });
             $('#frm_divepoint')[0].reset();
@@ -70,27 +70,56 @@
         $('#diver').val({{session_id}});
     }
 
-    function addMarker(title, latlng) {
+    function initObservationPosts(){
+        var url = "http://127.0.0.1:8000/location/observationposts/";
+        requestAjax("GET", url, null, function (response){
+            response.forEach(function(obsPost){
+                obsPosts.push(obsPost)
+                var imageSrc = 'http://127.0.0.1:8000/static/front_test/images/obs-post.png';
+                var imageSize = new kakao.maps.Size(20, 40); // 마커이미지의 크기입니다
+                var imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+                addMarker(obsPost.obs_post_name, new kakao.maps.LatLng(obsPost.obs_lat, obsPost.obs_lon), markerImage);
+            });
+        });
+    }
+
+    function addMarker(title, latlng, image=null) {
       var fixedLatLng = getFixedLatLng(latlng);
       var marker = new kakao.maps.Marker({
           title: title,
           position: fixedLatLng,
+          zIndex: (image == null) ? 2 : 1,
+          image: image,
           clickable: true
       });
-      kakao.maps.event.addListener(marker, 'click', function() {
-          moveMap(marker.getPosition());
-          $('#frm_divepoint')[0].reset();
-          getPointInfo(marker);
-      });
-      kakao.maps.event.addListener(marker, 'rightclick', function() {
-          deleteMarker(marker);
-      });
-      marker.setMap(map);
       markers.push(marker);
+      marker.setMap(map);
       moveMap(fixedLatLng);
       $('#frm_divepoint')[0].reset();
       $('#latitude').val(fixedLatLng.getLat());
       $('#longitude').val(fixedLatLng.getLng());
+
+      kakao.maps.event.addListener(marker, 'click', function() {
+          if(marker.getZIndex() == 1){     // obsPost
+              var obsPostId = getObsPostId(marker.getTitle());
+              getSeaState(obsPostId);
+          } else{
+              moveMap(marker.getPosition());
+              $('#frm_divepoint')[0].reset();
+              setPointInfo(marker);
+          }
+      });
+      kakao.maps.event.addListener(marker, 'rightclick', function() {
+          if(marker.getZIndex() == 1)     // obsPost
+              return;
+          var fixedLatLng = getFixedLatLng(marker.getPosition());
+          if(pointExists(fixedLatLng)){
+              return;
+          } else{
+              deleteMarker(marker);
+          }
+      });
     }
 
     function deleteMarker(marker) {
@@ -102,13 +131,11 @@
         });
     }
 
-    function getPointInfo(marker) {
+    function setPointInfo(marker) {
         var fixedLatLng = getFixedLatLng(marker.getPosition());
-        if(pointExists(fixedLatLng)){
-            $('#point_nm').val(p.point_nm);
-            $('#latitude').val(p.latitude);
-            $('#longitude').val(p.longitude);
-            $('#comment').val(p.comment);
+        var p = pointExists(fixedLatLng);
+        if(p){
+            setForm(p);
         } else{
             $('#latitude').val(fixedLatLng.getLat());
             $('#longitude').val(fixedLatLng.getLng());
@@ -127,14 +154,36 @@
     }
 
     function pointExists(latlng){
-        points.forEach(function(p){
-            if(latlng.toString() === new kakao.maps.LatLng(p.latitude, p.longitude).toString()){
-                console.log(p.point_nm);
-                return p;
-            } else{
-                return false;
+        for(var i=0; i<divePoints.length; i++){
+            if(latlng.toString() == new kakao.maps.LatLng(divePoints[i].latitude, divePoints[i].longitude).toString()){
+                return divePoints[i];
             }
+        }
+        return false;
+    }
+
+    function setForm(point){
+        $('#point_nm').val(point.point_nm);
+        $('#latitude').val(point.latitude);
+        $('#longitude').val(point.longitude);
+        $('#comment').val(point.comment);
+        $('#id').val(point.id);
+    }
+
+    function getSeaState(obsPostId){
+        var url = "http://127.0.0.1:8000/location/seastate/";
+        var data = {"obscode":obsPostId};
+        requestAjax("GET", url, data, function (response){
+            alert(JSON.stringify(response.result.data));
         });
+    }
+
+    function getObsPostId(obsPostName){
+        for(var i = 0; i < obsPosts.length; i++){
+            if(obsPosts[i].obs_post_name == obsPostName){
+                return obsPosts[i].obs_post_id;
+            }
+        }
     }
 
     </script>
@@ -149,7 +198,6 @@
         onclick="location.href='http://127.0.0.1:8000/accounts/logout/'">logout</button>
         <br><br>
         <form id="frm_divepoint" name="frm_divepoint">
-            {% csrf_token %}
             Point nm <input id="point_nm" type="text" name="point_nm"/><br><br>
             Latitude <input id="latitude" type="text" name="latitude"/><br><br>
             Longitude <input id="longitude" type="text" name="longitude"/><br><br>
@@ -157,6 +205,7 @@
             <input id="diver" type="hidden" name="diver"/>
             <input id="id" type="hidden"/>
             <input type="button" value="submit" id="submit"/>
+            <input type="button" value="delete" id="delete"/>
         </form>
     </div>
 </body>
