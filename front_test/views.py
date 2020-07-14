@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
+from scheduler import insert_observation_post_schedule
 
-def show_map(request):
+def map(request):
     if request.session.get('email', False):
         session_email = request.session['email']
         session_id = request.session['_auth_user_id']
@@ -11,10 +12,10 @@ def show_map(request):
     else:
         return redirect('/front/login/')
 
-def show_login(request):
+def login(request):
     return render(request, 'front_test/login.html')
 
-def show_menu(request):
+def menu(request):
     if request.session.get('email', False):
         session_email = request.session['email']
         print('login user : ' + session_email)
@@ -22,5 +23,12 @@ def show_menu(request):
     else:
         return render(request, 'front_test/login.html')
 
-def show_signup(request):
+def signup(request):
     return render(request, 'front_test/signup.html')
+
+def update_obs(request):
+    insert_observation_post_schedule()
+    return redirect('/front/map/')
+
+def divelog(request):
+    return render(request, 'front_test/divelog.html')

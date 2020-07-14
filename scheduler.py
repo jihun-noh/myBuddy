@@ -27,8 +27,12 @@ def insert_observation_post_schedule():
             serializer.save()
             print('insert ObservationPost -- ' + data['obs_post_id'])
         else:
-            print(serializer.errors)
-            print('data : ' + data)
+            if serializer.errors['obs_lat'][0].code == 'max_decimal_places'\
+            or serializer.errors['obs_lon'][0].code == 'max_decimal_places':
+                print('revalidation [{}]'.format(serializer.is_valid()))
+            else:
+                print(serializer.errors)
+                print('data : ' + str(data))
     print('Insert Observation Posts is completed')
 
 register_events(scheduler)

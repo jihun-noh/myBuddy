@@ -1,5 +1,6 @@
 <html>
 <head>
+    <title>지도</title>
 </head>
 <body>
     {% load static %}
@@ -31,8 +32,16 @@
                 }
             }
         }
+        document.getElementById("divelog").onclick = function() {
+            var popupWidth = 400;
+            var popupHeight = 500;
+            var popupX = (window.screen.width / 2) - (popupWidth / 2);
+            var popupY= (window.screen.height / 2) - (popupHeight / 2);
+            window.open('http://127.0.0.1:8000/front/divelog/',
+            '다이빙로그','status=no, height=' + popupHeight  + ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);
+        }
 
-        initMap();
+        init();
 
     });
 
@@ -40,6 +49,12 @@
     var markers = [];
     var divePoints = [];
     var obsPosts = [];
+
+    function init() {
+        initMap();
+        initObservationPosts();
+        initMarkers()
+    }
 
     function initMap() {
       var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
@@ -51,10 +66,6 @@
       kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
         addMarker('', mouseEvent.latLng);
       });
-
-      initObservationPosts();
-      initMarkers()
-
     }
 
     function initMarkers() {
@@ -76,8 +87,8 @@
             response.forEach(function(obsPost){
                 obsPosts.push(obsPost)
                 var imageSrc = 'http://127.0.0.1:8000/static/front_test/images/obs-post.png';
-                var imageSize = new kakao.maps.Size(20, 40); // 마커이미지의 크기입니다
-                var imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                var imageSize = new kakao.maps.Size(20, 40);
+                var imageOption = {offset: new kakao.maps.Point(27, 69)};
                 var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
                 addMarker(obsPost.obs_post_name, new kakao.maps.LatLng(obsPost.obs_lat, obsPost.obs_lon), markerImage);
             });
@@ -174,7 +185,7 @@
         var url = "http://127.0.0.1:8000/location/seastate/";
         var data = {"obscode":obsPostId};
         requestAjax("GET", url, data, function (response){
-            alert(JSON.stringify(response.result.data));
+            alert(`${getObsPostName(obsPostId)}\n${JSON.stringify(response.result.data)}`);
         });
     }
 
@@ -186,10 +197,19 @@
         }
     }
 
+    function getObsPostName(obsPostId){
+        for(var i = 0; i < obsPosts.length; i++){
+            if(obsPosts[i].obs_post_id == obsPostId){
+                return obsPosts[i].obs_post_name;
+            }
+        }
+    }
+
     </script>
     <div style="width:50%;float:left;">
         <br><br>
         <div id="map" style="width:80%;height:80%;"></div>
+        <input type="button" value="update_obs" onclick="location.href='http://127.0.0.1:8000/front/updateobs/'"/>
     </div>
     <div style="width:50%;float:right;">
         <br><br>
@@ -198,12 +218,14 @@
         onclick="location.href='http://127.0.0.1:8000/accounts/logout/'">logout</button>
         <br><br>
         <form id="frm_divepoint" name="frm_divepoint">
-            Point nm <input id="point_nm" type="text" name="point_nm"/><br><br>
+            Point nm <input id="point_nm" type="text" name="point_nm"/>
+            <input type="button" value="divelog" id="divelog"/><br><br>
             Latitude <input id="latitude" type="text" name="latitude"/><br><br>
             Longitude <input id="longitude" type="text" name="longitude"/><br><br>
             Comment <textarea id="comment" name="comment"></textarea><br><br>
             <input id="diver" type="hidden" name="diver"/>
             <input id="id" type="hidden"/>
+
             <input type="button" value="submit" id="submit"/>
             <input type="button" value="delete" id="delete"/>
         </form>
