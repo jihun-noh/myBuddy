@@ -91,8 +91,12 @@ WSGI_APPLICATION = 'MyBuddy.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DJANGO_DB_NAME', None),
+        'USER': os.environ.get('DJANGO_DB_NAME', None),
+        'PASSWORD': os.environ.get('DJANGO_DB_NAME', None),
+        'HOST': os.environ.get('DJANGO_DB_HOST', None),
+        'PORT': os.environ.get('DJANGO_DB_PORT', None),
     }
 }
 
@@ -156,3 +160,6 @@ SCHEDULER_CONFIG = {
 }
 SCHEDULER_AUTOSTART = True
 # APSCHEDULER_DATETIME_FORMAT =  "N j, Y, f:s a"  # Default
+
+# Session Configurations
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
