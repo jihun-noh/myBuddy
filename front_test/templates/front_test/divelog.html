@@ -9,11 +9,24 @@
     <script src="{% static 'front_test/js/utils.js' %}" type="text/javascript"></script>
     <script>
     $(document).ready(function() {
-        init()
+            document.getElementById("submit").onclick = function() {
+                var url = "http://127.0.0.1:8000/dive/divelogs/";
+                var data = $("#frm_divelog").serialize();
+                requestAjax("POST", url, data, function(){
+                    alert("등록완료");
+                    //location.reload(true);
+                });
+            }
+
+        init();
     });
 
+    const userId = sessionStorage.getItem("user_id");
+
     function init(){
-        getDiveLogs();
+        alert($('#point_id').val());
+    //    $('#diver').val();
+        //getDiveLogs();
     }
 
     function getDiveLogs(){
@@ -24,13 +37,15 @@
     }
 
     function setForm(log){
-        $('#log_nm').val(point.point_nm);
-        $('#dive_date').val(point.latitude);
-        $('#dive_time').val(point.longitude);
-        $('#temperature').val(point.comment);
-        $('#max_depth').val(point.id);
-        $('#buddy').val(point.id);
-        $('#comment').val(point.id);
+        $('#log_nm').val(log.log_nm);
+        $('#dive_date').val(log.dive_date);
+        $('#dive_time').val(log.dive_time);
+        $('#temperature').val(log.temperature);
+        $('#max_depth').val(log.max_depth);
+        $('#buddy').val(log.buddy);
+        $('#comment').val(log.comment);
+        $('#point_id').val(log.point_id);
+        $('#diver').val(log.diver);
     }
 
     </script>

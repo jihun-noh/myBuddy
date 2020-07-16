@@ -37,8 +37,9 @@
             var popupHeight = 500;
             var popupX = (window.screen.width / 2) - (popupWidth / 2);
             var popupY= (window.screen.height / 2) - (popupHeight / 2);
-            window.open('http://127.0.0.1:8000/front/divelog/',
+            var openWin = window.open('http://127.0.0.1:8000/front/divelog/',
             '다이빙로그','status=no, height=' + popupHeight  + ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);
+            openWin.$("#point_id").val($("#id").val());
         }
 
         init();
@@ -49,11 +50,15 @@
     var markers = [];
     var divePoints = [];
     var obsPosts = [];
+    const userEmail = sessionStorage.getItem("user_email");
+    const userId = sessionStorage.getItem("user_id");
 
     function init() {
         initMap();
         initObservationPosts();
-        initMarkers()
+        initMarkers();
+        $('#diver').val(userId);
+        document.getElementById('userEmail').innerHTML = userEmail;
     }
 
     function initMap() {
@@ -66,11 +71,12 @@
       kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
         addMarker('', mouseEvent.latLng);
       });
+      return;
     }
 
     function initMarkers() {
         var url = "http://127.0.0.1:8000/dive/divepoints/";
-        var data = {"diver":{{session_id}}};
+        var data = {"diver":userId};
         requestAjax("GET", url, data, function (response){
             response.forEach(function(point){
                 divePoints.push(point);
@@ -78,7 +84,7 @@
             });
             $('#frm_divepoint')[0].reset();
         });
-        $('#diver').val({{session_id}});
+        return;
     }
 
     function initObservationPosts(){
@@ -93,6 +99,7 @@
                 addMarker(obsPost.obs_post_name, new kakao.maps.LatLng(obsPost.obs_lat, obsPost.obs_lon), markerImage);
             });
         });
+        return;
     }
 
     function addMarker(title, latlng, image=null) {
@@ -106,7 +113,6 @@
       });
       markers.push(marker);
       marker.setMap(map);
-      moveMap(fixedLatLng);
       $('#frm_divepoint')[0].reset();
       $('#latitude').val(fixedLatLng.getLat());
       $('#longitude').val(fixedLatLng.getLng());
@@ -116,7 +122,7 @@
               var obsPostId = getObsPostId(marker.getTitle());
               getSeaState(obsPostId);
           } else{
-              moveMap(marker.getPosition());
+              moveMap(marker.getPosition(), 5);
               $('#frm_divepoint')[0].reset();
               setPointInfo(marker);
           }
@@ -213,7 +219,7 @@
     </div>
     <div style="width:50%;float:right;">
         <br><br>
-        로그인 유저 : {{session_email}}
+        로그인 유저 : <span id="userEmail"></span>
         <button type="button" name="logout" style="width:60px;height:30px;"
         onclick="location.href='http://127.0.0.1:8000/accounts/logout/'">logout</button>
         <br><br>
@@ -225,7 +231,6 @@
             Comment <textarea id="comment" name="comment"></textarea><br><br>
             <input id="diver" type="hidden" name="diver"/>
             <input id="id" type="hidden"/>
-
             <input type="button" value="submit" id="submit"/>
             <input type="button" value="delete" id="delete"/>
         </form>

@@ -23,6 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KHOA_SERVICE_KEY = os.environ.get('DJANGO_KHOA_SERVICE_KEY', None)
 KAKAO_REST_APP_KEY = os.environ.get('DJANGO_KAKAO_REST_APP_KEY', None)
 KAKAO_JAVASCRIPT_APP_KEY = os.environ.get('DJANGO_KAKAO_JAVASCRIPT_APP_KEY', None)
+DATABASE_NAME = os.environ.get('DJANGO_DB_NAME', None)
+DATABASE_HOST = os.environ.get('DJANGO_DB_HOST', None)
+DATABASE_PORT = os.environ.get('DJANGO_DB_PORT', None)
 secret_key = os.environ.get('DJANGO_SECRET_KEY', None)
 if not secret_key:
     raise ValueError('You must have "SECRET_KEY" variable')
@@ -92,11 +95,11 @@ WSGI_APPLICATION = 'MyBuddy.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DJANGO_DB_NAME', None),
-        'USER': os.environ.get('DJANGO_DB_NAME', None),
-        'PASSWORD': os.environ.get('DJANGO_DB_NAME', None),
-        'HOST': os.environ.get('DJANGO_DB_HOST', None),
-        'PORT': os.environ.get('DJANGO_DB_PORT', None),
+        'NAME': DATABASE_NAME,
+        'USER': DATABASE_NAME,
+        'PASSWORD': DATABASE_NAME,
+        'HOST': DATABASE_HOST,
+        'PORT': DATABASE_PORT,
     }
 }
 

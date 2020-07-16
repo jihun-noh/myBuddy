@@ -8,7 +8,7 @@ from location.models import ObservationPost
 scheduler = BackgroundScheduler()
 scheduler.add_jobstore(DjangoJobStore(), 'default')
 
-@register_job(scheduler, 'cron', minute='0,30')
+@register_job(scheduler, 'cron', minute='0')
 def insert_observation_post_schedule():
     print('Delete all Observation Posts')
     queryset = ObservationPost.objects.all().delete();
