@@ -14,14 +14,11 @@ class DivePointViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('diver',)
 
-point_list = DivePointViewSet.as_view({
-    'get': 'list',
-    'post': 'create',
-    })
-
 class DiveLogViewSet(viewsets.ModelViewSet):
     serializer_class = DiveLogSerializer
     queryset = DiveLog.objects.all()
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('point_id',)
 
 @api_view(['GET'])
 def dive_point(request):

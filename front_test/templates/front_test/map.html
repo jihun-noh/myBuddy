@@ -11,16 +11,27 @@
     <script>
     $(document).ready(function() {
         document.getElementById("submit").onclick = function() {
-            var url = "http://127.0.0.1:8000/dive/divepoints/";
+            var latLng = new kakao.maps.LatLng($("#latitude").val(), $("#longitude").val());
+            var url = "http://127.0.0.1:8000/dive/divepoints/"
             var data = $("#frm_divepoint").serialize();
-            requestAjax("POST", url, data, function(){
-                alert("등록완료");
-                location.reload(true);
-            });
+            if(pointExists(latLng)){
+                if(confirm("해당 포인트를 수정하시겠습니까?")){
+                    url = url + $("#id").val() + "/";
+                    requestAjax("PUT", url, data, function(){
+                        alert("수정완료");
+                        location.reload(true);
+                    });
+                }
+            } else{
+                requestAjax("POST", url, data, function(){
+                    alert("등록완료");
+                    location.reload(true);
+                });
+            }
         }
         document.getElementById("delete").onclick = function() {
-            var fixedLatLng = getFixedLatLng(new kakao.maps.LatLng($("#latitude").val(), $("#longitude").val()));
-            if(pointExists(fixedLatLng)){
+            var latLng = new kakao.maps.LatLng($("#latitude").val(), $("#longitude").val());
+            if(pointExists(latLng)){
                 if(confirm(`[${$("#point_nm").val()}] 포인트를 삭제하겠습니까?\n(등록된 모든 로그가 같이 삭제됩니다.)`)){
                     var url = `http://127.0.0.1:8000/dive/divepoints/${$("#id").val()}/`;
                     requestAjax("DELETE", url, null, function(){
@@ -33,13 +44,15 @@
             }
         }
         document.getElementById("divelog").onclick = function() {
-            var popupWidth = 400;
-            var popupHeight = 500;
+            if (!$("#point_nm").val()){
+                return;
+            }
+            var popupWidth = 600;
+            var popupHeight = 400;
             var popupX = (window.screen.width / 2) - (popupWidth / 2);
             var popupY= (window.screen.height / 2) - (popupHeight / 2);
-            var openWin = window.open('http://127.0.0.1:8000/front/divelog/',
+            window.open('http://127.0.0.1:8000/front/divelog/?pointid=' + $("#id").val(),
             '다이빙로그','status=no, height=' + popupHeight  + ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);
-            openWin.$("#point_id").val($("#id").val());
         }
 
         init();

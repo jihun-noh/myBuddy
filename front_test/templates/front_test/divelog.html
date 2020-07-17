@@ -18,38 +18,75 @@
                 });
             }
 
+
         init();
     });
 
     const userId = sessionStorage.getItem("user_id");
+    const pointId = window.location.search.split("=")[1];
+    var diveLogs = [];
 
     function init(){
-        alert($('#point_id').val());
-    //    $('#diver').val();
-        //getDiveLogs();
+        getLogList();
+        setForm(null);
+        return;
     }
 
-    function getDiveLogs(){
+    function getLogList(){
         var url = "http://127.0.0.1:8000/dive/divelogs/";
-        requestAjax("GET", url, null, function(response){
-            console.log(response.result);
+        var data = {"point_id":pointId};
+        requestAjax("GET", url, data, function(response){
+            response.forEach(function(log){
+                diveLogs.push(log);
+            });
+            initTable();
+            console.log(diveLogs);
+        });
+        return;
+    }
+
+    function initTable(){
+        for(var i=0; i<diveLogs.length; i++){
+            var table = document.getElementById("table_log");
+            var newRow = table.insertRow(-1);
+            let cell1 = newRow.insertCell(0);
+            let cell2 = newRow.insertCell(1);
+            let text1 = document.createTextNode(diveLogs[i]["log_nm"]);
+            let text2 = document.createTextNode(diveLogs[i]["dive_date"]);
+            cell1.appendChild(text1);
+            cell2.appendChild(text2);
+        }
+        $("#table_log tr").click(function(){
+            var tr = $(this);
+            for(var i=0; i<diveLogs.length; i++){
+                if(tr.children()[0].textContent == diveLogs[i]["log_nm"]){
+                    setForm(diveLogs[i]);
+                    break;
+                }
+            }
         });
     }
 
     function setForm(log){
-        $('#log_nm').val(log.log_nm);
-        $('#dive_date').val(log.dive_date);
-        $('#dive_time').val(log.dive_time);
-        $('#temperature').val(log.temperature);
-        $('#max_depth').val(log.max_depth);
-        $('#buddy').val(log.buddy);
-        $('#comment').val(log.comment);
-        $('#point_id').val(log.point_id);
-        $('#diver').val(log.diver);
+        if(log != null){
+            $('#log_nm').val(log["log_nm"]);
+            $('#dive_date').val(log["dive_date"]);
+            $('#dive_time').val(log["dive_time"]);
+            $('#temperature').val(log["temperature"]);
+            $('#max_depth').val(log["max_depth"]);
+            $('#buddy').val(log["buddy"]);
+            $('#comment').val(log["comment"]);
+        }
+        $('#point_id').val(pointId);
+        $('#diver').val(userId);
+        return;
     }
-
     </script>
-    <div style='margin-left:80px;'>
+    <div style="width:50%;float:left;">
+        <table id="table_log" border="1">
+        </table>
+    </div>
+    <div style="width:50%;float:right;">
         <br><br>
         <form id="frm_divelog" name="frm_divelog">
             log_nm <input id="log_nm" type="text" name="log_nm"/><br><br>
