@@ -25,9 +25,15 @@ def map(request):
     else:
         return redirect('/front/login/')
 
-def divelog(request):
+def dive_log_list(request):
     if request.session.get('email', False):
-        return render(request, 'front_test/divelog.html')
+        return render(request, 'front_test/diveloglist.html')
+    else:
+        return redirect('/front/login/')
+
+def dive_log_form(request):
+    if request.session.get('email', False):
+        return render(request, 'front_test/divelogform.html')
     else:
         return redirect('/front/login/')
 

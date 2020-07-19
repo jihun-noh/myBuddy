@@ -47,11 +47,11 @@
             if (!$("#point_nm").val()){
                 return;
             }
-            var popupWidth = 600;
-            var popupHeight = 400;
+            var popupWidth = 450;
+            var popupHeight = 450;
             var popupX = (window.screen.width / 2) - (popupWidth / 2);
             var popupY= (window.screen.height / 2) - (popupHeight / 2);
-            window.open('http://127.0.0.1:8000/front/divelog/?pointid=' + $("#id").val(),
+            window.open('http://127.0.0.1:8000/front/diveloglist/?pointid=' + $("#id").val(),
             '다이빙로그','status=no, height=' + popupHeight  + ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);
         }
 
