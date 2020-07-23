@@ -11,7 +11,7 @@
     $(document).ready(function() {
         document.getElementById("newlog").onclick = function() {
             const pointId = getUrlParams().pointid;
-            location.href=`http://127.0.0.1:8000/front/divelogform/?logid=${0}&pointid=${pointId}`;
+            location.href=`/front/divelogform/?logid=${0}&pointid=${pointId}`;
         }
         init();
     });
@@ -24,7 +24,7 @@
 
     function getLogList(pointId){
         var diveLogs = [];
-        var url = "http://127.0.0.1:8000/dive/divelogs/";
+        var url = "/dive/divelogs/";
         var data = {"point_id":pointId};
         requestAjax("GET", url, data, function(response){
             response.forEach(function(log){
@@ -51,7 +51,7 @@
             var tr = $(this);
             for(var i=0; i<diveLogs.length; i++){
                 if(tr.children()[0].textContent == diveLogs[i]["log_nm"]){
-                    location.href=`http://127.0.0.1:8000/front/divelogform/?logid=${diveLogs[i]["id"]}&pointid=${diveLogs[i]["point_id"]}`;
+                    location.href=`/front/divelogform/?logid=${diveLogs[i]["id"]}&pointid=${diveLogs[i]["point_id"]}`;
                     break;
                 }
             }

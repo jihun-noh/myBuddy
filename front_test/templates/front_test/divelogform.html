@@ -10,7 +10,7 @@
     <script>
     $(document).ready(function() {
             document.getElementById("submit").onclick = function() {
-                var url = "http://127.0.0.1:8000/dive/divelogs/";
+                var url = "/dive/divelogs/";
                 var data = $("#frm_divelog").serialize();
                 if($("#id").val()){
                     if(confirm("로그를 수정하시겠습니까?")){
@@ -30,7 +30,7 @@
             document.getElementById("delete").onclick = function() {
                 if($("#id").val()){
                     if(confirm("로그를 삭제하겠습니까?")){
-                        var url = `http://127.0.0.1:8000/dive/divelogs/${$("#id").val()}/`;
+                        var url = `/dive/divelogs/${$("#id").val()}/`;
                         requestAjax("DELETE", url, null, function(){
                             alert("삭제완료");
                             window.history.back();
@@ -60,7 +60,7 @@
     }
 
     function getLog(logId){
-        var url = `http://127.0.0.1:8000/dive/divelogs/${logId}/`;
+        var url = `/dive/divelogs/${logId}/`;
         requestAjax("GET", url, null, function(response){
             setForm(response);
             console.log(response);

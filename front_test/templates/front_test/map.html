@@ -12,7 +12,7 @@
     $(document).ready(function() {
         document.getElementById("submit").onclick = function() {
             var latLng = new kakao.maps.LatLng($("#latitude").val(), $("#longitude").val());
-            var url = "http://127.0.0.1:8000/dive/divepoints/"
+            var url = "/dive/divepoints/"
             var data = $("#frm_divepoint").serialize();
             if(pointExists(latLng)){
                 if(confirm("해당 포인트를 수정하시겠습니까?")){
@@ -33,7 +33,7 @@
             var latLng = new kakao.maps.LatLng($("#latitude").val(), $("#longitude").val());
             if(pointExists(latLng)){
                 if(confirm(`[${$("#point_nm").val()}] 포인트를 삭제하겠습니까?\n(등록된 모든 로그가 같이 삭제됩니다.)`)){
-                    var url = `http://127.0.0.1:8000/dive/divepoints/${$("#id").val()}/`;
+                    var url = `/dive/divepoints/${$("#id").val()}/`;
                     requestAjax("DELETE", url, null, function(){
                         alert("삭제완료");
                         location.reload(true);
@@ -51,7 +51,7 @@
             var popupHeight = 450;
             var popupX = (window.screen.width / 2) - (popupWidth / 2);
             var popupY= (window.screen.height / 2) - (popupHeight / 2);
-            window.open('http://127.0.0.1:8000/front/diveloglist/?pointid=' + $("#id").val(),
+            window.open('/front/diveloglist/?pointid=' + $("#id").val(),
             '다이빙로그','status=no, height=' + popupHeight  + ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);
         }
 
@@ -88,7 +88,7 @@
     }
 
     function initMarkers() {
-        var url = "http://127.0.0.1:8000/dive/divepoints/";
+        var url = "/dive/divepoints/";
         var data = {"diver":userId};
         requestAjax("GET", url, data, function (response){
             response.forEach(function(point){
@@ -101,11 +101,11 @@
     }
 
     function initObservationPosts(){
-        var url = "http://127.0.0.1:8000/location/observationposts/";
+        var url = "/location/observationposts/";
         requestAjax("GET", url, null, function (response){
             response.forEach(function(obsPost){
                 obsPosts.push(obsPost)
-                var imageSrc = 'http://127.0.0.1:8000/static/front_test/images/obs-post.png';
+                var imageSrc = '/static/front_test/images/obs-post.png';
                 var imageSize = new kakao.maps.Size(20, 40);
                 var imageOption = {offset: new kakao.maps.Point(27, 69)};
                 var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
@@ -201,7 +201,7 @@
     }
 
     function getSeaState(obsPostId){
-        var url = "http://127.0.0.1:8000/location/seastate/";
+        var url = "/location/seastate/";
         var data = {"obscode":obsPostId};
         requestAjax("GET", url, data, function (response){
             alert(`${getObsPostName(obsPostId)}\n${JSON.stringify(response.result.data)}`);
@@ -228,13 +228,13 @@
     <div style="width:50%;float:left;">
         <br><br>
         <div id="map" style="width:80%;height:80%;"></div>
-        <input type="button" value="update_obs" onclick="location.href='http://127.0.0.1:8000/front/updateobs/'"/>
+        <input type="button" value="update_obs" onclick="location.href='/front/updateobs/'"/>
     </div>
     <div style="width:50%;float:right;">
         <br><br>
         로그인 유저 : <span id="userEmail"></span>
         <button type="button" name="logout" style="width:60px;height:30px;"
-        onclick="location.href='http://127.0.0.1:8000/accounts/logout/'">logout</button>
+        onclick="location.href='/accounts/logout/'">logout</button>
         <br><br>
         <form id="frm_divepoint" name="frm_divepoint">
             Point nm <input id="point_nm" type="text" name="point_nm"/>

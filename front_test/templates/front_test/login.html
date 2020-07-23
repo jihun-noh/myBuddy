@@ -5,14 +5,14 @@
 </head>
 <body>
     <div style="text-align:center;padding-top:20%">
-        <form name="divepoint" action="http://127.0.0.1:8000/accounts/login/" method="POST">
+        <form name="divepoint" action="/accounts/login/" method="POST">
             {% csrf_token %}
             Email <input type="text" name="email"/><br><br>
             Password <input type="password" name="password"/><br><br>
             <input type="submit" value="login"/>
         </form>
         <button type="button" name="signup"
-        onclick="location.href='http://127.0.0.1:8000/front/signup/'">signup</button>
+        onclick="location.href='/front/signup/'">signup</button>
     </div>
 </body>
 <html>
