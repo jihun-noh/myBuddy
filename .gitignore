@@ -4,6 +4,7 @@
 
 ### myApp ###
 staticfiles/
+.env
 
 ### Django ###
 *.log
