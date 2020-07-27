@@ -1,3 +1,4 @@
+import socket
 from django.shortcuts import render, redirect
 from django.conf import settings
 from scheduler import insert_observation_post_schedule
@@ -10,30 +11,34 @@ def login(request):
 
 def menu(request):
     if request.session.get('email', False):
+        static_root = 'http://{}:80/static'.format(socket.gethostbyname(socket.getfqdn()))
         session_email = request.session['email']
         session_id = request.session['_auth_user_id']
         print('login user : ' + session_email)
         return render(request, 'front_test/menu.html', \
-        {'session_email':session_email, 'session_id':session_id})
+        {'static_root':static_root, 'session_email':session_email, 'session_id':session_id})
     else:
         return redirect('/front/login/')
 
 def map(request):
     if request.session.get('email', False):
+        static_root = 'http://{}:80/static'.format(socket.gethostbyname(socket.getfqdn()))
         app_key = settings.KAKAO_JAVASCRIPT_APP_KEY
-        return render(request, 'front_test/map.html', {'app_key': app_key})
+        return render(request, 'front_test/map.html', {'static_root':static_root, 'app_key': app_key})
     else:
         return redirect('/front/login/')
 
 def dive_log_list(request):
     if request.session.get('email', False):
-        return render(request, 'front_test/diveloglist.html')
+        static_root = 'http://{}:80/static'.format(socket.gethostbyname(socket.getfqdn()))
+        return render(request, 'front_test/diveloglist.html', {'static_root':static_root})
     else:
         return redirect('/front/login/')
 
 def dive_log_form(request):
     if request.session.get('email', False):
-        return render(request, 'front_test/divelogform.html')
+        static_root = 'http://{}:80/static'.format(socket.gethostbyname(socket.getfqdn()))
+        return render(request, 'front_test/divelogform.html', {'static_root':static_root})
     else:
         return redirect('/front/login/')
 
