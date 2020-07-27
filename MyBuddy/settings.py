@@ -26,7 +26,7 @@ KAKAO_JAVASCRIPT_APP_KEY = os.environ.get('DJANGO_KAKAO_JAVASCRIPT_APP_KEY', Non
 DATABASE_NAME = os.environ.get('DJANGO_DB_NAME', None)
 DATABASE_HOST = os.environ.get('DJANGO_DB_HOST', None)
 DATABASE_PORT = os.environ.get('DJANGO_DB_PORT', None)
-STATIC_ROOT_WEB = os.environ.get('STATIC_ROOT_WEB', None)
+static_url = os.environ.get('STATIC_URL', None)
 secret_key = os.environ.get('DJANGO_SECRET_KEY', None)
 if not secret_key:
     raise ValueError('You must have "SECRET_KEY" variable')
@@ -141,12 +141,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     'front_test/static/',
 ]
+# The absolute path to the directory where collectstatic will collect static files for deployment.
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# URL to use when referring to static files located in STATIC_ROOT.
+STATIC_URL = static_url
 
+# RestFramework
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
