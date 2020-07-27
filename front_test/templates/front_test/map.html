@@ -105,7 +105,7 @@
         requestAjax("GET", url, null, function (response){
             response.forEach(function(obsPost){
                 obsPosts.push(obsPost)
-                var imageSrc = '/static/front_test/images/obs-post.png';
+                var imageSrc = "{% static 'front_test/images/obs-post.png' %}";
                 var imageSize = new kakao.maps.Size(20, 40);
                 var imageOption = {offset: new kakao.maps.Point(27, 69)};
                 var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
