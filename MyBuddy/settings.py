@@ -26,6 +26,7 @@ KAKAO_JAVASCRIPT_APP_KEY = os.environ.get('DJANGO_KAKAO_JAVASCRIPT_APP_KEY', Non
 DATABASE_NAME = os.environ.get('DJANGO_DB_NAME', None)
 DATABASE_HOST = os.environ.get('DJANGO_DB_HOST', None)
 DATABASE_PORT = os.environ.get('DJANGO_DB_PORT', None)
+STATIC_ROOT_WEB = os.environ.get('STATIC_ROOT_WEB', None)
 secret_key = os.environ.get('DJANGO_SECRET_KEY', None)
 if not secret_key:
     raise ValueError('You must have "SECRET_KEY" variable')
