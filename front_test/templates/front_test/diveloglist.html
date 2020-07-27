@@ -26,11 +26,15 @@
         var url = "/dive/divelogs/";
         var data = {"point_id":pointId};
         requestAjax("GET", url, data, function(response){
-            response.forEach(function(log){
-                diveLogs.push(log);
-            });
-            initTable(diveLogs);
-            console.log(diveLogs);
+            if(response.length == 0){
+                document.getElementById('table_log').innerHTML = '등록된 로그가 없습니다.'
+            }else{
+                response.forEach(function(log){
+                    diveLogs.push(log);
+                });
+                initTable(diveLogs);
+                console.log(diveLogs);
+            }
         });
         return;
     }
@@ -39,10 +43,10 @@
         for(var i=0; i<diveLogs.length; i++){
             var table = document.getElementById("table_log");
             var newRow = table.insertRow(-1);
-            let cell1 = newRow.insertCell(0);
-            let cell2 = newRow.insertCell(1);
-            let text1 = document.createTextNode(diveLogs[i]["log_nm"]);
-            let text2 = document.createTextNode(diveLogs[i]["dive_date"]);
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var text1 = document.createTextNode(diveLogs[i]["log_nm"]);
+            var text2 = document.createTextNode(diveLogs[i]["dive_date"]);
             cell1.appendChild(text1);
             cell2.appendChild(text2);
         }
