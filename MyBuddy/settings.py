@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_apscheduler',
     'requests',
+    'drf_yasg',
     'account',
     'dive',
     'location',
@@ -151,7 +152,8 @@ STATIC_URL = static_url
 
 # RestFramework
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema',
 }
 
 # Scheduler 설정
@@ -170,6 +172,9 @@ SCHEDULER_AUTOSTART = True
 
 # Session Configurations
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Cookie Configurations
+CSRF_COOKIE_HTTPONLY = True
 
 # logging
 LOGGING = {
