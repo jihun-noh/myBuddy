@@ -6,3 +6,5 @@ Language - Python3.8 & Django REST-framework
 Server - AWS EC2 Amazon Linux 2  
 WEB & WAS - Nginx & Gunicorn  
 DB - AWS RDS PostgreSQL  
+
+# 진행중..
