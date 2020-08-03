@@ -141,7 +141,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
 STATICFILES_DIRS = [
     'front_test/static/',
 ]
@@ -149,6 +148,11 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # URL to use when referring to static files located in STATIC_ROOT.
 STATIC_URL = static_url
+
+# Media files
+MEDIA_URL = '/media/'
+# 업로드된 파일을 저장할 디렉토리 경로
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # RestFramework
 REST_FRAMEWORK = {
