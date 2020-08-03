@@ -13,7 +13,9 @@ class UserViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 def signup_view(request):
     user = User.objects.create_user(email=request.data['email'], \
-    password=request.data['password'], nickname=request.data['nickname'])
+    password=request.data['password'], nickname=request.data['nickname'], \
+    profile_image=request.FILES.get('profile_image', default='profile/default.JPG'), \
+    license_image=request.FILES.get('license_image', default='license/default.JPG'))
     print('signup - [{}]'.format(user.get_email))
     return redirect('/front/login/')
 

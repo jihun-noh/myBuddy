@@ -22,9 +22,9 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     email =  models.EmailField(unique=True)
     nickname = models.CharField(max_length=10, unique=True)
-    profile_image = models.ImageField(blank=True, upload_to="profile")
+    profile_image = models.ImageField(default='profile/default.JPG', upload_to="profile")
     license = models.CharField(max_length=20, blank=True)
-    license_image = models.ImageField(blank=True, upload_to="license")
+    license_image = models.ImageField(default='license/default.JPG', upload_to="license")
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     last_login =  models.DateTimeField(blank=True, null=True)
