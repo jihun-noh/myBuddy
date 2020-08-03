@@ -187,7 +187,7 @@ LOGGING = {
     'formatters': {
         'format1': {
             'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
-            'datefmt': '%Y-%b-%d %H:%M:%S'
+            'datefmt': '%Y-%m-%d %H:%M:%S'
         },
         'format2': {
             'format': '%(levelname)s %(message)s'
@@ -199,8 +199,8 @@ LOGGING = {
             'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/django.log'),
             'formatter': 'format1',
-            'when': 'midnight',
-            'backupCount': '10',
+            'when' : 'midnight',
+            'backupCount': 10,
         },
         'console': {
             'level': 'DEBUG',
