@@ -27,6 +27,7 @@ DATABASE_NAME = os.environ.get('DJANGO_DB_NAME', None)
 DATABASE_HOST = os.environ.get('DJANGO_DB_HOST', None)
 DATABASE_PORT = os.environ.get('DJANGO_DB_PORT', None)
 static_url = os.environ.get('DJANGO_STATIC_URL', None)
+media_url = os.environ.get('DJANGO_MEDIA_URL', None)
 secret_key = os.environ.get('DJANGO_SECRET_KEY', None)
 if not secret_key:
     raise ValueError('You must have "SECRET_KEY" variable')
@@ -153,7 +154,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = static_url
 
 # Media files
-MEDIA_URL = '/media/'
+MEDIA_URL = media_url
 # 업로드된 파일을 저장할 디렉토리 경로
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
