@@ -14,17 +14,10 @@
             var url = `/accounts/users/${userId}/`;
             var form = $('#frm_user')[0];
             var data = new FormData(form);
-            data.append("email", $("#email").val());
-            data.append("password", $("#password").val());
-            data.append("nickname", $("#nickname").val());
-            data.append("profile_image", $("#profile_image")[0].files[0]);
-            data.append("license", $("#license").val());
-            data.append("license_image", $("#license_image")[0].files[0]);
-
-        //    var data = $("#frm_user").serialize();
-            requestFileAjax("PATCH", url, data, function(){
+            requestFileAjax("PATCH", url, data, function(response){
                 alert("수정완료");
-                location.reload(true);
+                opener.location.reload();
+                window.close()
             });
         }
         init();
@@ -41,9 +34,8 @@
         requestAjax("GET", url, null, function(response){
             $('#email').val(response["email"]);
             $('#nickname').val(response["nickname"]);
-//            $('#profile_image').val(response["profile_image"]);
             $('#license').val(response["license"]);
-//            $('#license_image').val(response["license_image"]);
+            $('#id').val(response["id"]);
         });
     }
     </script>
@@ -56,6 +48,7 @@
             Profile image <input type="file" name="profile_image" id="profile_image"/><br><br>
             License <input type="text" name="license" id="license"/><br><br>
             License image <input type="file" name="license_image" id="license_image"/><br><br>
+            <input id="id" type="hidden" name="id"/>
             <input type="button" value="submit" id="submit"/>
         </form>
     </div>
