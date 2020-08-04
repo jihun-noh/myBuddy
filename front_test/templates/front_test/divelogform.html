@@ -89,6 +89,7 @@
         <input type="button" value="back" id="goback"/>
         <br><br>
         <form id="frm_divelog" name="frm_divelog">
+            {% csrf_token %}
             log_nm <input id="log_nm" type="text" name="log_nm"/><br><br>
             dive_date <input id="dive_date" type="text" name="dive_date" placeholder="2020-07-30 12:00:00"/><br><br>
             dive_time <input id="dive_time" type="text" name="dive_time" placeholder="00:04:30"/><br><br>

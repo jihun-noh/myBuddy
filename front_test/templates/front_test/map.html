@@ -237,6 +237,7 @@
         onclick="location.href='/accounts/logout/'">logout</button>
         <br><br>
         <form id="frm_divepoint" name="frm_divepoint">
+            {% csrf_token %}
             Point nm <input id="point_nm" type="text" name="point_nm"/>
             <input type="button" value="divelog" id="divelog"/><br><br>
             Latitude <input id="latitude" type="text" name="latitude"/><br><br>

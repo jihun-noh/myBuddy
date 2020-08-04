@@ -1,10 +1,32 @@
 function requestAjax(method, url, data, callback) {
-    var csrftoken = getCookie('csrftoken');
+    var csrftoken = $('[name=csrfmiddlewaretoken]').val();
     $.ajax({
         type: method,
         url: url,
         data: data,
         dataType: "json",
+        beforeSend: function(request){
+            request.setRequestHeader("X-CSRFToken", csrftoken);
+        },
+        success: function(response){
+            console.log(response);
+            callback(response);
+        },
+        error: function(request, status, error){
+            console.log(request.responseText);
+            alert(request.responseText);
+        }
+    });
+}
+
+function requestFileAjax(method, url, data, callback) {
+    var csrftoken = $('[name=csrfmiddlewaretoken]').val();
+    $.ajax({
+        type: method,
+        url: url,
+        data: data,
+        contentType : false,
+        processData : false,
         beforeSend: function(request){
             request.setRequestHeader("X-CSRFToken", csrftoken);
         },
