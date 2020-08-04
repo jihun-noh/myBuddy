@@ -1,3 +1,4 @@
+import os.path
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import viewsets, status
@@ -13,6 +14,10 @@ class UserViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, pk=None):
         user = self.get_object()
         data = {}
+        for f in request.FILES:
+            ext = os.path.splitext(request.FILES.get(f).name)[1]
+            file_name = '{}_{}'.format(request.data['id'], f + ext)
+            request.FILES.get(f).name = file_name
         for d in request.data:
             if request.data[d]:
                 if d == 'password':
