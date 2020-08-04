@@ -21,6 +21,7 @@ urlpatterns = [
     path('login/', views.login),
     path('menu/', views.menu),
     path('signup/', views.signup),
+    path('changeprofile/', views.change_profile),
     path('updateobs/', views.update_obs),
     path('diveloglist/', views.dive_log_list),
     path('divelogform/', views.dive_log_form),

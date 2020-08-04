@@ -18,6 +18,12 @@ def menu(request):
     else:
         return redirect('/front/login/')
 
+def change_profile(request):
+    if request.session.get('email', False):
+        return render(request, 'front_test/change_profile.html')
+    else:
+        return redirect('/front/login/')
+
 def map(request):
     if request.session.get('email', False):
         app_key = settings.KAKAO_JAVASCRIPT_APP_KEY

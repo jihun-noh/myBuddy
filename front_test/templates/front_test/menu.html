@@ -9,10 +9,20 @@
     <script src="{% static 'front_test/js/utils.js' %}" type="text/javascript"></script>
     <script>
     $(document).ready(function() {
+        document.getElementById("changeProfile").onclick = function() {
+            var popupWidth = 450;
+            var popupHeight = 450;
+            var popupX = (window.screen.width / 2) - (popupWidth / 2);
+            var popupY= (window.screen.height / 2) - (popupHeight / 2);
+            window.open("/front/changeprofile/",'정보변경','status=no, height=' + popupHeight  +
+            ', width=' + popupWidth  + ', left='+ popupX + ', top='+ popupY);
+        }
         sessionStorage.setItem("user_email", "{{session_email}}");
         sessionStorage.setItem("user_id", "{{session_id}}");
         init();
     });
+
+    var user;
 
     function init(){
         const userEmail = sessionStorage.getItem("user_email");
@@ -20,6 +30,7 @@
         document.getElementById('userEmail').innerHTML = userEmail;
         var url = `/accounts/users/${userId}/`;
         requestAjax("GET", url, null, function(response){
+            user = response
             document.getElementById('userProfileImg').innerHTML = `<img src=${response["profile_image"]} width="50px" height="50px">`;
             document.getElementById('userLicenseImg').innerHTML = `<img src=${response["license_image"]} width="50px" height="50px">`;
             if(response["license"] == ""){
@@ -38,7 +49,8 @@
   </div>
   <div style="width:50%;float:right;">
     로그인 유저 : <span id="userProfileImg"></span>
-    <span id="userEmail"></span></br>
+    <span id="userEmail"></span>
+    <button type="button" id="changeProfile">정보수정</button></br>
     라이센스 : <span id="userLicenseImg"></span>
     <span id="userLicense"></span>
   </div>
