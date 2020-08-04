@@ -23,6 +23,7 @@ router.register(r'divelogs', views.DiveLogViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('fbv', views.dive_point),
-    path('cbv', views.DivePointView.as_view()),
+    path('divecertorg/', views.dive_cert_org),
+    path('fbv/', views.dive_point),
+    path('cbv/', views.DivePointView.as_view()),
 ]

@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from django_filters.rest_framework import DjangoFilterBackend
-from .serializers import DivePointSerializer, DiveLogSerializer
-from .models import DivePoint, DiveLog
+from .serializers import DivePointSerializer, DiveLogSerializer, DiveCertOrgSerializer
+from .models import DivePoint, DiveLog, DiveCertOrg
 
 class DivePointViewSet(viewsets.ModelViewSet):
     serializer_class = DivePointSerializer
@@ -20,6 +20,13 @@ class DiveLogViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('point_id',)
 
+@api_view(['GET'])
+def dive_cert_org(request):
+    if request.method == 'GET':
+        queryset = DiveCertOrg.objects.all()
+        serializer_class = DiveCertOrgSerializer(queryset, many=True)
+        return Response(serializer_class.data)
+        
 @api_view(['GET'])
 def dive_point(request):
     if request.method == 'GET':

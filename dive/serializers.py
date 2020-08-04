@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import DivePoint, DiveLog
+from .models import DivePoint, DiveLog, DiveCertOrg
 
 class DivePointSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,3 +24,8 @@ class DiveLogSerializer(serializers.ModelSerializer):
             if queryset.exists():
                 raise serializers.ValidationError('log_nm [{}] is already exist'.format(data['log_nm']))
         return data
+
+class DiveCertOrgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DiveCertOrg
+        fields = '__all__'
