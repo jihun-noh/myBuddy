@@ -38,4 +38,4 @@ class DiveCertOrg(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str('{}_{}'.format(self.org_name, self.org_level))
+        return str('{}_{}'.format(self.org_name, self.cert_level))
