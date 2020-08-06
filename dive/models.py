@@ -32,8 +32,8 @@ class DiveLog(models.Model):
 
 class DiveCertOrg(models.Model):
     org_name = models.CharField(max_length=20)
-    org_level = models.CharField(max_length=20)
-    org_step = models.SmallIntegerField(default=0)
+    cert_level = models.CharField(max_length=20)
+    cert_step = models.SmallIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
