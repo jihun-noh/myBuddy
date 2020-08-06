@@ -13,6 +13,9 @@
         document.getElementById("submit").onclick = function() {
             var url = `/accounts/users/${userId}/`;
             var form = $('#frm_user')[0];
+            if($('#license_org').val() != ""){
+                $('#license').val(`${$('#license_org').val()}_${$('#license_level').val()}`);
+            }
             var data = new FormData(form);
             requestFileAjax("PATCH", url, data, function(response){
                 alert("수정완료");
@@ -20,13 +23,23 @@
                 window.close()
             });
         }
+        $('#license_org').change(function(){
+            if(!this.value){
+                removeOption("license_level");
+            }
+            initLevelSelect(this.value);
+        });
+
         init();
     });
 
     const userId = sessionStorage.getItem("user_id");
+    var certList = [];
+    var certOrgList = [];
 
     function init(){
         initForm();
+        initSelect();
     }
 
     function initForm(){
@@ -38,6 +51,53 @@
             $('#id').val(response["id"]);
         });
     }
+
+    function initSelect(){
+        var url = "/dive/divecertorg/";
+        requestAjax("GET", url, null, function(response){
+            response.forEach(function(cert){
+                certList.push(cert);
+                certOrgList.push(cert.org_name);
+            });
+            initOrgSelect(certOrgList);
+        });
+    }
+
+    function initOrgSelect(orgList){
+        var list = Array.from(new Set(orgList))
+        list.forEach(function(org){
+            addOption("license_org", org);
+        });
+        if($('#license').val()){
+            var license_org = $('#license').val().split('_')[0];
+            var license_level = $('#license').val().split('_')[1];
+            $("#license_org").val(license_org).prop("selected", true);
+            $("#license_org").trigger("change");
+            $("#license_level").val(license_level).prop("selected", true);
+        }
+    }
+
+    function initLevelSelect(org){
+        removeOption("license_level");
+        certList.forEach(function(cert){
+            if(org == cert.org_name){
+                addOption("license_level", cert.cert_level);
+            }
+        });
+    }
+
+    function addOption(id, value){
+        var selectBox = document.getElementById(id);
+        var option = document.createElement('option');
+        option.value = value;
+        option.text = value;
+        selectBox.add(option);
+    }
+
+    function removeOption(id){
+        $("form[name='frm_user'] select[name='" + id + "'] option").remove();
+        $("form[name='frm_user'] select[name='" + id + "']").append("<option value=''>선택</option>");
+    }
     </script>
     <div style="text-align:center;padding-top:20%">
         <form id="frm_user" name="frm_user" enctype="multipart/form-data">
@@ -46,9 +106,15 @@
             Password <input type="password" name="password" id="password"/><br><br>
             Nickname <input type="text" name="nickname" id="nickname"/><br><br>
             Profile image <input type="file" name="profile_image" id="profile_image"/><br><br>
-            License <input type="text" name="license" id="license"/><br><br>
-            License image <input type="file" name="license_image" id="license_image"/><br><br>
-            <input id="id" type="hidden" name="id"/>
+            License <select name="license_org" id='license_org'>
+            <option value="" selected="selected">선택</option>
+            </select>
+            <select name="license_level" id='license_level'>
+            <option value="" selected="selected">선택</option>
+            </select><br><br>
+            License image <input type="file" name="license_image"/><br><br>
+            <input type="hidden" name="license" id="license"/>
+            <input type="hidden" name="id" id="id"/>
             <input type="button" value="submit" id="submit"/>
         </form>
     </div>
