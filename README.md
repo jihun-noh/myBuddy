@@ -2,7 +2,7 @@
 # 프리다이빙 포인트 및 로그 저장 서비스
 
 # 기간
-2020.07.01 ~ 
+2020.07.01 ~ 08.07
 
 # 개발환경
 Language - Python3.8 & Django REST-framework  
